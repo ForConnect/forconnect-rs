@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import NeuralNet from '@/components/NeuralNet';
 import { CONFIG } from '@/lib/config';
 
-const nav: { label: string; id: string }[] = [
+const nav: { label: string; id: string; href?: string }[] = [
   { label: 'Početna', id: 'hero' },
   { label: 'Kako radi', id: 'how' },
   { label: 'Za koga', id: 'forwho' },
@@ -12,6 +12,7 @@ const nav: { label: string; id: string }[] = [
   { label: 'Cena', id: 'pricing' },
   { label: 'Kontakt', id: 'demo' },
   { label: 'Pitanja', id: 'faq' },
+  { label: 'Blog', id: 'blog', href: '/blog' },
 ];
 
 const howSteps = [
@@ -155,11 +156,15 @@ export default function HomePage() {
             </div>
           </div>
           <nav className="hidden gap-6 text-sm text-gray-300 md:flex">
-            {nav.map((n) => (
-              <button key={n.id} onClick={() => scrollToId(n.id)} className="transition hover:text-[#00F0FF]">
-                {n.label}
-              </button>
-            ))}
+            {nav.map((n) =>
+              n.href ? (
+                <a key={n.id} href={n.href} className="transition hover:text-[#00F0FF]">{n.label}</a>
+              ) : (
+                <button key={n.id} onClick={() => scrollToId(n.id)} className="transition hover:text-[#00F0FF]">
+                  {n.label}
+                </button>
+              )
+            )}
           </nav>
           <button
             onClick={() => setMenuOpen((o) => !o)}
@@ -177,15 +182,25 @@ export default function HomePage() {
           </button>
           {menuOpen && (
             <div className="absolute right-0 top-full z-50 mt-2 w-56 rounded-xl border border-gray-700 bg-[#020617]/95 p-2 backdrop-blur md:hidden">
-              {nav.map((n) => (
-                <button
-                  key={n.id}
-                  onClick={() => { setMenuOpen(false); scrollToId(n.id); }}
-                  className="block w-full rounded-lg px-3 py-2 text-left text-sm text-gray-200 transition hover:bg-[#00F0FF22] hover:text-[#00F0FF]"
-                >
-                  {n.label}
-                </button>
-              ))}
+              {nav.map((n) =>
+                n.href ? (
+                  <a
+                    key={n.id}
+                    href={n.href}
+                    className="block w-full rounded-lg px-3 py-2 text-left text-sm text-gray-200 transition hover:bg-[#00F0FF22] hover:text-[#00F0FF]"
+                  >
+                    {n.label}
+                  </a>
+                ) : (
+                  <button
+                    key={n.id}
+                    onClick={() => { setMenuOpen(false); scrollToId(n.id); }}
+                    className="block w-full rounded-lg px-3 py-2 text-left text-sm text-gray-200 transition hover:bg-[#00F0FF22] hover:text-[#00F0FF]"
+                  >
+                    {n.label}
+                  </button>
+                )
+              )}
             </div>
           )}
         </header>
